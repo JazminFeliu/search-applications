@@ -1,6 +1,7 @@
 <script>
+  import Movie from "./Movie.svelte";
   let value = "";
-  let louding = false;
+  let loading = false;
   let response = [];
 
   const handleInput = (event) => (value = event.target.value);
@@ -13,7 +14,7 @@
       .then((apiResponse) => {
         response = apiResponse.Search || [];
 
-        louding = false;
+        loading = false;
       });
   }
 </script>
@@ -22,8 +23,10 @@
 
 {#if loading}
   <strong>Loading...</strong>
-{:else if response.length > 0}
-  <strong>Tenemos {response.length} películas</strong>
 {:else}
-  <strong>No hay resultados</strong>
+  {#each response as { Title, Poster, Year }, index}
+    <Movie title={Title} poster={Poster} year={Year} />
+  {:else}
+    <strong>No hay resultados</strong>
+  {/each}
 {/if}
